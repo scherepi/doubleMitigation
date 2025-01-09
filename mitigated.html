@@ -1,0 +1,34 @@
+<!-- Example code for the mitigation of double clickjacking attacks on modern websites. -->
+<!-- Written by Joaquin Schere, on January 7th of 2025. -->
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Jackproof!</title>
+	</head>
+	
+	<body>
+		<!-- Basic self-explanatory front-end. -->
+		<h4>This button shouldn't work until you hit the 'w' key.</h4>
+		<button id="button" type="button">Click me!</button>
+		<h1 id="target">Not clicked</h1>
+		<script>
+			// Basic button functionality.
+			let button = document.getElementById("button")
+			button.addEventListener("click", onclick)
+			function onclick() {
+				console.log("button clicked")
+				const target = document.getElementById("target");
+				target.innerHTML = "Clicked!"
+			}
+			
+			// This is the clickjacking mitigation code.
+			var buttons = document.querySelectorAll('button')
+			// First, we disable every button, then we define a function we'll call later to bring them back.
+			buttons.forEach(button => button.disabled = true) 
+			function enableButtons() { buttons.forEach(button => button.disabled = false)}
+			// Then we add a quick event listener to wait for the user to hit the "w" key - once they do, we re-enable our buttons.
+			document.addEventListener("keydown", function(e) { if (e.key === "w") { enableButtons(); }});
+		</script>
+	</body>
+</html>
